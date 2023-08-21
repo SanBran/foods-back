@@ -1,7 +1,7 @@
 const getRecipeById = require("../controllers/getRecipeById");
 const createRecipe = require("../controllers/createRecipe");
 const getAllRecipes = require("../controllers/getAllRecipes");
-const getRecipeByName = require("../controllers/getRecipeByName");
+const readRecipeByQuery = require("../controllers/getRecipeByQuery");
 
 const getRecipeByIdHandler = async (req, res) => {
   const { idRecipe } = req.params;
@@ -17,11 +17,19 @@ const getRecipeByIdHandler = async (req, res) => {
 };
 
 const getRecipeByNameHandler = async (req, res) => {
-  const { name } = req.query;
+  const { page } = req.query;
+  const querys = req.body;
+  const querysNum = Object.keys(querys).length;
 
   try {
-    const response = name ? await getRecipeByName(name) : await getAllRecipes();
-    res.status(200).json(response);
+    if (querysNum === 0) {
+      const response = await getAllRecipes;
+    } else {
+      const repsonse = await get.readRecipeByQuery(
+        querys,
+        page ? page : (page = 1)
+      );
+    }
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

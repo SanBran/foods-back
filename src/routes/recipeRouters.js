@@ -5,8 +5,8 @@ const {
   getRecipeByNameHandler,
 } = require("../handlers/recipesHandlers");
 
-routerRecipe.get("/:idRecipe", getRecipeByIdHandler);
-routerRecipe.get("/", getRecipeByNameHandler);
+routerRecipe.post("/:idRecipe", getRecipeByIdHandler);
+routerRecipe.post("/", getRecipeByNameHandler);
 routerRecipe.post("/", createRecipeHandler);
 
 module.exports = routerRecipe;
