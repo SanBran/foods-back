@@ -1,11 +1,14 @@
-const axios = require("axios");
-require("dotenv").config();
-const { API_KEY } = process.env;
 const { Recipe, Diet } = require("../db");
-const { cleanArrayDb, cleanArrayApi } = require("../utils/utils");
+const { cleanArrayDb } = require("../utils/utils");
 
-const getAllRecipes = async () => {
+const getAllRecipes = async (page = 1) => {
+  const limit = process.env.PAGES_ITEMS;
+  const offset = (page - 1) * limit;
+
   const recipesDb = await Recipe.findAll({
+    offset: offset,
+    limit: limit,
+    order: [["name", "ASC"]],
     include: {
       model: Diet,
       attributes: ["name"],
@@ -15,16 +18,9 @@ const getAllRecipes = async () => {
     },
   });
 
-  const recipesApi = (
-    await axios(
-      `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`
-    )
-  ).data.results;
-
   const dataBaseRecipes = cleanArrayDb(recipesDb);
-  const apiRecipes = cleanArrayApi(recipesApi);
 
-  return [...dataBaseRecipes, ...apiRecipes];
+  return dataBaseRecipes;
 };
 
 module.exports = getAllRecipes;

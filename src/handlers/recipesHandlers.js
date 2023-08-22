@@ -17,18 +17,20 @@ const getRecipeByIdHandler = async (req, res) => {
 };
 
 const getRecipeByNameHandler = async (req, res) => {
-  const { page } = req.query;
+  let { page } = req.query;
   const querys = req.body;
   const querysNum = Object.keys(querys).length;
 
   try {
-    if (querysNum === 0) {
-      const response = await getAllRecipes;
+    if (querysNum == 0) {
+      const response = await getAllRecipes(page);
+      res.status(200).json(response);
     } else {
-      const repsonse = await get.readRecipeByQuery(
+      const response = await readRecipeByQuery(
         querys,
         page ? page : (page = 1)
       );
+      res.status(200).json(response);
     }
   } catch (error) {
     res.status(400).json({ error: error.message });

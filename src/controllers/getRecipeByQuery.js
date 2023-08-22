@@ -1,5 +1,3 @@
-const axios = require("axios");
-require("dotenv").config();
 const { Recipe, Diet } = require("../db");
 const { Op } = require("sequelize");
 
@@ -17,6 +15,7 @@ const readRecipeByQuery = async (querys, page) => {
     Object.entries(querys).forEach(([key, value]) => {
       switch (key) {
         case "healthScoreRange": {
+          console.log(1);
           const [hS1, hS2] = value.split("-");
           whereCondition["healthScore"] = { [Op.between]: [hS1, hS2] };
           break;
@@ -31,19 +30,18 @@ const readRecipeByQuery = async (querys, page) => {
 
     const pageSize = parseInt(process.env.PAGES_ITEMS);
     const offset = (parseInt(page) - 1) * pageSize;
-
     const { rows: findRecipe, count: totalRecipes } =
-      await Book.findAndCountAll({
+      await Recipe.findAndCountAll({
         offset: offset,
         limit: pageSize,
         where: whereCondition,
-        order: [["title", "ASC"]],
+        order: [["name", "ASC"]],
         include: [{ model: Diet, as: "diets" }],
       });
 
     if (findRecipe.length > 0) {
       const totalPages = Math.ceil(totalRecipes / pageSize);
-      return { totalPages: totalPages, book: findRecipe };
+      return { totalPages: totalPages, recipe: findRecipe };
     } else {
       return { mensaje: "No matches found" };
     }
