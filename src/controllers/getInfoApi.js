@@ -30,19 +30,25 @@ const getInfoApi = async () => {
 
     await resultsFunction(diets);
 
-    const cleanRecipes = await recipesApi.map((e) => {
-      let steps = e.steps ? e.steps[0] : null;
-      let newRecipe = Recipe.create({
-        id: e.cca3,
-        title: e.title,
-        image: e.image,
-        summary: e.summary,
-        healthScore: e.healthScore,
-        diets: e.diets,
-        steps: e.analyzedInstructions[0]?.steps.map((e) => e.step).join(" "),
-        created: false,
-      });
-    });
+    const cleanRecipes = await Promise.all(
+      recipesApi.map(async (e) => {
+        let newRecipe = await Recipe.create({
+          id: e.cca3,
+          title: e.title,
+          image: e.image,
+          summary: e.summary,
+          healthScore: e.healthScore,
+          steps: e.analyzedInstructions[0]?.steps.map((e) => e.step),
+          created: false,
+        });
+
+        const diets = await Diet.findAll({ where: { title: e.diets } });
+
+        await newRecipe.addDiets(diets);
+      })
+    );
+
+    await Promise.all(cleanRecipes);
   } else {
     return;
   }
