@@ -8,10 +8,10 @@ const getAllRecipes = async (page = 1) => {
   const recipesDb = await Recipe.findAll({
     offset: offset,
     limit: limit,
-    order: [["name", "ASC"]],
+    order: [["title", "ASC"]],
     include: {
       model: Diet,
-      attributes: ["name"],
+      attributes: ["title"],
       through: {
         attributes: [],
       },

@@ -5,7 +5,7 @@ const readRecipeByQuery = async (querys, page) => {
   try {
     const whereCondition = {};
     const keyValues = [
-      "name",
+      "title",
       "healthScore",
       "healtScoreRange",
       "diets",
@@ -35,8 +35,14 @@ const readRecipeByQuery = async (querys, page) => {
         offset: offset,
         limit: pageSize,
         where: whereCondition,
-        order: [["name", "ASC"]],
-        include: [{ model: Diet, as: "diets" }],
+        order: [["title", "ASC"]],
+        include: {
+          model: Diet,
+          attributes: ["title"],
+          through: {
+            attributes: [],
+          },
+        },
       });
 
     if (findRecipe.length > 0) {

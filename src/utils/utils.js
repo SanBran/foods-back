@@ -1,7 +1,7 @@
 const cleanResApi = (res) => {
   const clean = {
     id: res.id,
-    name: res.title,
+    title: res.title,
     image: res.image,
     summary: res.summary,
     healthScore: res.healthScore,
@@ -16,11 +16,11 @@ const cleanResApi = (res) => {
 const cleanResDatabase = (res) => {
   const clean = {
     id: res.id,
-    name: res.name,
+    title: res.title,
     image: res.image,
     summary: res.summary,
     healthScore: res.healthScore,
-    diets: res.diets?.map((e) => e.name),
+    diets: res.diets?.map((e) => e.title),
     steps: res.steps,
     created: true,
   };
@@ -32,11 +32,11 @@ const cleanArrayDb = (arr) => {
   const clean = arr.map((e) => {
     return {
       id: e.id,
-      name: e.name,
+      title: e.title,
       image: e.image,
       summary: e.summary,
       healthScore: e.healthScore,
-      diets: e.diets?.map((e) => e.name),
+      diets: e.diets?.map((e) => e.title),
       steps: e.steps,
       created: true,
     };
@@ -48,7 +48,7 @@ const cleanArrayApi = (arr) => {
   const clean = arr.map((e) => {
     return {
       id: e.id,
-      name: e.title,
+      title: e.title,
       image: e.image,
       summary: e.summary,
       healthScore: e.healthScore,

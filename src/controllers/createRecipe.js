@@ -1,7 +1,7 @@
 const { Recipe, Diet } = require("../db");
 
 const createRecipe = async (
-  name,
+  title,
   image,
   summary,
   healthScore,
@@ -9,16 +9,17 @@ const createRecipe = async (
   diets
 ) => {
   let newRecipe = await Recipe.create({
-    name,
+    title,
     image,
     summary,
     healthScore,
     steps,
+    diets,
   });
 
   let dietas = await Diet.findAll({
     where: {
-      name: diets,
+      title: diets,
     },
   });
 

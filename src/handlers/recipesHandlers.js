@@ -6,10 +6,8 @@ const readRecipeByQuery = require("../controllers/getRecipeByQuery");
 const getRecipeByIdHandler = async (req, res) => {
   const { idRecipe } = req.params;
 
-  const source = isNaN(idRecipe) ? "bdd" : "api";
-
   try {
-    const recipeId = await getRecipeById(idRecipe, source);
+    const recipeId = await getRecipeById(idRecipe);
     res.status(200).json(recipeId);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -38,14 +36,14 @@ const getRecipeByNameHandler = async (req, res) => {
 };
 
 const createRecipeHandler = async (req, res) => {
-  const { name, image, summary, healthScore, steps, diets } = req.body;
+  const { title, image, summary, healthScore, steps, diets } = req.body;
 
   try {
-    if (!name || !image || !summary || !healthScore || !steps)
+    if (!title || !image || !summary || !healthScore || !steps)
       res.status(400).json({ message: "Missing data" });
 
     const response = await createRecipe(
-      name,
+      title,
       image,
       summary,
       healthScore,
